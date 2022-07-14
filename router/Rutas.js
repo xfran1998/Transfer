@@ -3,6 +3,7 @@ const path = require('path');
 const router = express.Router();
 
 
+
 router.use('/js', express.static(path.join(__dirname, '..', 'public', 'js')));
 
 router.use('/css', express.static(path.join(__dirname, '..', 'public', 'css')));
