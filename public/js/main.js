@@ -1,6 +1,6 @@
 import { AsyncTransfer } from "./async.js";
 
-class Main {
+class Main extends AsyncTransfer {
     static PostFormLogin() {
         let form = document.getElementById('login-form');
         console.log(form);
@@ -33,21 +33,29 @@ class Main {
         return true;
     }
 
+    static GetDataForm(form) {
+        let inputs = form.querySelectorAll('input');
+        
+        let data = {};
+        inputs.forEach(input => {
+            data[input.id] = input.value;         
+        });
+        
+        return data;
+    }
+
     static async CheckUser(username, password) {
         const data = {username: username, password: password};
 
-        const json_resp = await AsyncTransfer.PostAPIAsync('http://localhost:3000/api/login', data);
+        // const json_resp = await AsyncTransfer.PostAPIAsync('http://localhost:3000/api/login', data);
+        const json_resp = await Main.PostAPIAsync('http://localhost:3000/api/login', data);
 
         console.log(json_resp);
     }
+
+    // static async ReplacePage(section, url_page) {
+    //     AsyncTransfer.ReplacePage(section, url_page);
+    // }
 }
 
-window.addEventListener('load', () => {
-    // check url page
-    let url_page = window.location.href;
-    let page = url_page.split('/').pop();
-
-    if (page === 'login.html') {
-        Main.PostFormLogin();
-    }
-});
+export { Main };

@@ -22,12 +22,8 @@ router.get('/test2.html', (req, res, next) => {
 router.use('/', (req, res, next) => {
     // send all static files required of the html
     if (req.url === '/' || req.url === '/index.html') {
-        if (req.session.userid || DEBUG) { // change to normal
-            res.sendFile(path.join(__dirname, '..', 'public', 'index.html'));
-        }
-        else{
-            res.redirect('./login.html');
-        }
+        const is_loged = (req.session.userid || DEBUG); 
+        res.render('index.ejs', {is_loged: is_loged});
     }
     else{
         next();

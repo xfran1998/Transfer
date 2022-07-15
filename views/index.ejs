@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <script src="/js/main.js" type="module"></script> -->
+    <title>Transferencias Insolectric</title>
+</head>
+<body id="main-body">
+    <% if (is_loged) { %>
+        <h1 id="test-div">Loged</h1>
+    <% } else { %>
+        <h1 id="test-div">Not loged</h1>
+        <script type="module">
+            import { Main } from "/js/main.js"; 
+
+            Main.ReplacePage('main-body', '/login.html');
+        </script>
+    <% } %>
+</body>
+</html>

@@ -49,9 +49,35 @@ class AsyncTransfer {
     }
 
     static async ReplacePage(id_replace, url_page) {
+        console.log('replace page');
         let page_html = await AsyncTransfer.GetPageAsync(url_page);
 
         document.getElementById(id_replace).innerHTML = page_html;
+        AsyncTransfer.CallScripts();
+    }
+
+    static async CallScripts() {
+        let scripts = document.querySelectorAll('script');
+
+        // call scripts
+        scripts.forEach(script => {
+            // let src = script.getAttribute('src');
+            // if (src) { // if script has src
+            //     let script_html = AsyncTransfer.GetPageAsync(src);
+            //     eval(script_html);
+            // }
+
+            // if script has innerHTML
+            // eval(script.innerHTML);
+            let script_html = document.createElement('script');
+            script_html.innerHTML = script.innerHTML;
+            if (script_html.src) 
+                script_html.src = script.src;
+            // make it module
+            script_html.setAttribute('type', 'module');
+            document.body.appendChild(script_html);
+        });
+
     }
 }
 

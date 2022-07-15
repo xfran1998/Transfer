@@ -7,6 +7,9 @@ const sessions = require('express-session');
 // Import variables from .env
 require('dotenv').config();
 
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
+
 const oneDay = 1000 * 60 * 60 * 24;
 app.use(sessions({
     secret: process.env.SESSION_SECRET,
