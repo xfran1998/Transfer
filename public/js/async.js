@@ -58,6 +58,7 @@ class AsyncTransfer {
 
     static async CallScripts() {
         let scripts = document.querySelectorAll('script');
+        console.log('call scripts');
 
         // call scripts
         scripts.forEach(script => {
@@ -69,6 +70,8 @@ class AsyncTransfer {
 
             // if script has innerHTML
             // eval(script.innerHTML);
+
+
             let script_html = document.createElement('script');
             script_html.innerHTML = script.innerHTML;
             if (script_html.src) 

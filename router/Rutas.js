@@ -26,7 +26,6 @@ router.use('/', (req, res, next) => {
             data.files = GetFilesFromFolder(path.join(__dirname, '..', 'transfer', req.session.userid));
         }
     
-        console.log(JSON.stringify(data.files));
         res.render('index.ejs', data);
     }
     else{
@@ -34,14 +33,14 @@ router.use('/', (req, res, next) => {
     }    
 });
 
-router.get('/download/:', (req, res) => {
+router.get('/download/:file', (req, res) => {
     // send all static files required of the html
     const data = { is_loged: (req.session.userid || DEBUG) };
-    const file = req.query.file;
+    // const file = req.query.file;
+    const file = req.params.file;
 
     if (data.is_loged && file) {
         data.files = GetFilesFromFolder(path.join(__dirname, '..', 'transfer', req.session.userid));
-        console.log(JSON.stringify(data.files));
         
         // if file exists download it
         if (data.files.includes(file)) {

@@ -63,8 +63,36 @@ class Main extends AsyncTransfer {
     }
 
     static async DownloadFile(file_name) {
-        
+        console.log('download file');
+        Main.GetAsync('./download/' + file_name);
+    }
+
+    static SetButtonsDownload() {
+        let buttons = document.querySelectorAll('.btn-download');
+        console.log('buttons');
+        console.log(buttons);
+
+        buttons.forEach(button => {
+            button.addEventListener('click', (e) => {
+                e.preventDefault();
+
+                const name = e.target.getAttribute('data-name');
+                console.log(name);
+                Main.DownloadFile(name);
+            });
+        });
+    }
+    
+    static async DownloadFile(name) {
+        const response = await Main.GetAsync('/download/' + name);
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = name;
+        link.click();
     }
 }
 
+console.log('main');
 export { Main };

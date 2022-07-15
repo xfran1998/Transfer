@@ -12,8 +12,15 @@
         <h1 id="test-div">Files</h1>
     
     <% files.forEach( (file) => { %>
-        <h3>--> <%= file %></h3>    
+        <button class="btn-download" data-name="<%= file %>">--> <%= file %></button> <br><br>
     <% }) %>
+    <script type="module">
+        import { Main } from "/js/main.js"; 
+        
+        
+        console.log('Main');
+        Main.SetButtonsDownload();
+    </script>
     <% } else { %>
         <script type="module">
             import { Main } from "/js/main.js"; 

@@ -7,7 +7,6 @@ const db_conn = new DB();
 db_conn.connect();
 
 router.post('/login', (req, res) => {
-    console.log('post login');
     const username = req.body.username;
     const password = req.body.password;
 
@@ -28,7 +27,7 @@ async function check_user(username, password, res, req) {
         let session = req.session;
         session.userid = req.body.username;
 
-        // console.log(req.session)
+        console.log(req.session)
         res.send({code: 200, message: 'ok'});
     }
     else {
