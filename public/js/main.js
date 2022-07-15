@@ -63,14 +63,11 @@ class Main extends AsyncTransfer {
     }
 
     static async DownloadFile(file_name) {
-        console.log('download file');
         Main.GetAsync('./download/' + file_name);
     }
 
     static SetButtonsDownload() {
         let buttons = document.querySelectorAll('.btn-download');
-        console.log('buttons');
-        console.log(buttons);
 
         buttons.forEach(button => {
             button.addEventListener('click', (e) => {
@@ -94,5 +91,4 @@ class Main extends AsyncTransfer {
     }
 }
 
-console.log('main');
 export { Main };

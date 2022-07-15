@@ -49,7 +49,6 @@ class AsyncTransfer {
     }
 
     static async ReplacePage(id_replace, url_page) {
-        console.log('replace page');
         let page_html = await AsyncTransfer.GetPageAsync(url_page);
 
         document.getElementById(id_replace).innerHTML = page_html;
@@ -58,7 +57,6 @@ class AsyncTransfer {
 
     static async CallScripts() {
         let scripts = document.querySelectorAll('script');
-        console.log('call scripts');
 
         // call scripts
         scripts.forEach(script => {
@@ -86,5 +84,3 @@ class AsyncTransfer {
 
 // export AsyncTransfer;
 export { AsyncTransfer };
-
-console.log('served');
