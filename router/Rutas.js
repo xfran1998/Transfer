@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require('path');
 const router = express.Router();
+const DEBUG = false;
 
 router.use('/js', express.static(path.join(__dirname, '..', 'public', 'js')));
 
@@ -21,11 +22,11 @@ router.get('/test2.html', (req, res, next) => {
 router.use('/', (req, res, next) => {
     // send all static files required of the html
     if (req.url === '/' || req.url === '/index.html') {
-        if (req.session.userid) {
+        if (req.session.userid || DEBUG) { // change to normal
             res.sendFile(path.join(__dirname, '..', 'public', 'index.html'));
         }
         else{
-            res.sendFile(path.join(__dirname, '..', 'public', 'login.html'));
+            res.redirect('./login.html');
         }
     }
     else{
