@@ -9,9 +9,12 @@
 </head>
 <body id="main-body">
     <% if (is_loged) { %>
-        <h1 id="test-div">Loged</h1>
+        <h1 id="test-div">Files</h1>
+    
+    <% files.forEach( (file) => { %>
+        <h3>--> <%= file %></h3>    
+    <% }) %>
     <% } else { %>
-        <h1 id="test-div">Not loged</h1>
         <script type="module">
             import { Main } from "/js/main.js"; 
 

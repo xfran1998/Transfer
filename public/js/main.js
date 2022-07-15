@@ -7,15 +7,24 @@ class Main extends AsyncTransfer {
 
         form.addEventListener('submit', (e) => {
             e.preventDefault();
-            let username = document.getElementById('username').value;
-            let password = document.getElementById('password').value;
-
-            if (Main.ValidForm(form) && Main.CheckUser(username, password)) {
-                console.log('login');
-            }
-            else
-                alert('Not valid username or password');    
+            Main.LoginUser(form);
         });
+    }
+
+    static async LoginUser(form) {
+        let username = document.getElementById('username').value;
+        let password = document.getElementById('password').value;
+
+        if (Main.ValidForm(form)) {
+            const is_valid_user = await Main.CheckUser(username, password);
+
+            if (is_valid_user) 
+                Main.ReplacePage('main-body', '/index.html');
+        }
+        else
+            alert('Not valid username or password');    
+
+        return false;
     }
 
     static ValidForm(form) {
@@ -50,12 +59,12 @@ class Main extends AsyncTransfer {
         // const json_resp = await AsyncTransfer.PostAPIAsync('http://localhost:3000/api/login', data);
         const json_resp = await Main.PostAPIAsync('http://localhost:3000/api/login', data);
 
-        console.log(json_resp);
+        return json_resp.code === 200;
     }
 
-    // static async ReplacePage(section, url_page) {
-    //     AsyncTransfer.ReplacePage(section, url_page);
-    // }
+    static async DownloadFile(file_name) {
+        
+    }
 }
 
 export { Main };
