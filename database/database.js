@@ -66,7 +66,7 @@ class DB{
         return false;
     }
 
-    async test_add_user(user, password){
+    async add_user(user, password){
         try{
             console.log('test_add_user');
             const hash_password = bcrypt.hashSync(password, 10);

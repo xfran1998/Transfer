@@ -4,7 +4,6 @@ const router = express.Router();
 const DB = require(path.join(__dirname, '..', 'database', 'database.js'));
 
 const db_conn = new DB();
-db_conn.connect();
 
 router.post('/login', (req, res) => {
     const username = req.body.username;
