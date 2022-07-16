@@ -67,18 +67,20 @@ class DB{
         return false;
     }
 
-    async add_user(user, password){
+    async create_user(user, password, del_date){
         try{
-            console.log('test_add_user');
             const hash_password = bcrypt.hashSync(password, 10);
     
-            const sql = 'INSERT INTO users (username, password) VALUES (?, ?)';
-            const args = [user, hash_password];
+            const sql = 'INSERT INTO users (username, password, date_delete) VALUES (?, ?, ?)';
+            const args = [user, hash_password, del_date];
             const rows = await this.query(sql, args);
             console.log(JSON.stringify(rows));
+
+            return true;
         }
         catch(err){
             console.log(err);
+            return false;
         }
     }
 

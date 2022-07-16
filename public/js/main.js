@@ -11,6 +11,46 @@ class Main extends AsyncTransfer {
         });
     }
 
+    static async PostForm(id_form){
+        const form = document.getElementById(id_form);
+        
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            Main.PostData(form);
+        });
+    }
+    
+    static async PostData(form) {
+        const url = form.getAttribute('action');
+        const data = Main.GetDataForm(form);
+        
+        // check if url string contains 'api'
+        if (url.includes('api')) {
+            console.log('api');
+            const resp_data = await Main.PostAPIAsync(url, data);
+            return resp_data;
+        }
+        else {
+            console.log('not api');
+            const resp_data = await Main.PostTextAsync(url, data);
+            return resp_data;
+        }
+    }
+
+    static async GetDataForm(form){
+        let inputs = form.querySelectorAll('input');
+
+        let data = {};
+        inputs.forEach(input => {
+            data[input.id] = input.value;
+        });
+
+        return data;
+    }
+
+
+
     static async LoginUser(form, type) {
         let username = document.getElementById('username').value;
         let password = document.getElementById('password').value;

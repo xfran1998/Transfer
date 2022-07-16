@@ -48,6 +48,14 @@ class AsyncTransfer {
         return json;
     }
 
+    static async PostTextAsync(url_page, data) {
+        const response = await AsyncTransfer.PostAsync(url_page, 'application/x-www-urlencoded', data);
+
+        const text = await response.text();
+
+        return text;
+    }
+
     static async ReplacePage(id_replace, url_page) {
         let page_html = await AsyncTransfer.GetPageAsync(url_page);
 

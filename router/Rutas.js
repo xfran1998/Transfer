@@ -19,12 +19,11 @@ router.get('/login.html', (req, res) => {
 });
 
 router.get('/admin', (req, res) => {
-    console.log('admin');
     const is_loged = (req.session.adminid || DEBUG); 
 
     if (is_loged) 
         res.render('admin.ejs', {is_loged: is_loged});
-        else
+    else
         res.render('login.ejs', {type: 'admin'});
 });
 
