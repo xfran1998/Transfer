@@ -41,7 +41,7 @@ class DB{
     }
 
     async get_user_by_username(username){
-        const sql = 'SELECT * FROM users WHERE username = ?';
+        const sql = 'SELECT * FROM users WHERE username = ? AND active = 1';
         const args = [username];
         const rows = await this.query(sql, args);
         return rows[0];
