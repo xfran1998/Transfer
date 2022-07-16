@@ -15,7 +15,17 @@ router.get('/login.html', (req, res) => {
     if (is_loged) 
         res.render('index.ejs', {is_loged: is_loged});
     else
-        res.sendFile(path.join(__dirname, '..', 'public', 'login.html'));
+        res.render('login.ejs', {type: 'user'});
+});
+
+router.get('/admin', (req, res) => {
+    console.log('admin');
+    const is_loged = (req.session.adminid || DEBUG); 
+
+    if (is_loged) 
+        res.render('admin.ejs', {is_loged: is_loged});
+        else
+        res.render('login.ejs', {type: 'admin'});
 });
 
 router.use('/', (req, res, next) => {

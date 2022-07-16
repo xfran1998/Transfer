@@ -8,8 +8,9 @@ const db_conn = new DB();
 router.post('/login', (req, res) => {
     const username = req.body.username;
     const password = req.body.password;
+    const admin = (req.body.type == 'admin') ? 1 : 0;
 
-    check_user(username, password, res, req); 
+    check_user(username, password, admin, res, req); 
 });
 
 router.use((req, res) => {
@@ -19,14 +20,19 @@ router.use((req, res) => {
 
 module.exports = router;
 
-async function check_user(username, password, res, req) {
-    const is_correct = await db_conn.check_user(username, password);
+async function check_user(username, password, admin, res, req) {
+    const is_correct = await db_conn.check_user(username, password, admin);
     
     if (is_correct) {
         let session = req.session;
-        session.userid = req.body.username;
+        
+        if (admin) {
+            req.session.adminid = username;
+        }
+        else {
+            session.userid = req.body.username;
+        }
 
-        console.log(req.session)
         res.send({code: 200, message: 'ok'});
     }
     else {

@@ -1,25 +1,29 @@
 import { AsyncTransfer } from "./async.js";
 
 class Main extends AsyncTransfer {
-    static PostFormLogin() {
+    static PostFormLogin(type) {
         let form = document.getElementById('login-form');
         console.log(form);
 
         form.addEventListener('submit', (e) => {
             e.preventDefault();
-            Main.LoginUser(form);
+            Main.LoginUser(form, type);
         });
     }
 
-    static async LoginUser(form) {
+    static async LoginUser(form, type) {
         let username = document.getElementById('username').value;
         let password = document.getElementById('password').value;
 
         if (Main.ValidForm(form)) {
-            const is_valid_user = await Main.CheckUser(username, password);
+            const is_valid_user = await Main.CheckUser(username, password, type);
+            console.log(type);
 
             if (is_valid_user) 
-                Main.ReplacePage('main-body', '/index.html');
+                if (type == 'admin')
+                    Main.ReplacePage('main-body', '/admin');
+                else
+                    Main.ReplacePage('main-body', '/index.html');
         }
         else
             alert('Not valid username or password');    
@@ -53,8 +57,8 @@ class Main extends AsyncTransfer {
         return data;
     }
 
-    static async CheckUser(username, password) {
-        const data = {username: username, password: password};
+    static async CheckUser(username, password, type) {
+        const data = {username: username, password: password, type: type};
 
         // const json_resp = await AsyncTransfer.PostAPIAsync('http://localhost:3000/api/login', data);
         const json_resp = await Main.PostAPIAsync('http://localhost:3000/api/login', data);

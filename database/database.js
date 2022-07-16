@@ -47,7 +47,7 @@ class DB{
         return rows[0];
     }
 
-    async check_user(user, password){
+    async check_user(user, password, admin){
         try{            
             const user_row = await this.get_user_by_username(user);
             
@@ -55,9 +55,10 @@ class DB{
                 return false;
             }
             
-            let comp = bcrypt.compareSync(password, user_row.password);
+            // check if password is correct and if user is admin, in case of admin check if user is admin if it's user don't check if user is admin
+            let is_valid = bcrypt.compareSync(password, user_row.password) && ( user_row.admin == admin || admin == 0 );
 
-            return comp;
+            return is_valid;
         }
         catch(err){
             console.log('check_user: ' + err);
