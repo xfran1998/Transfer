@@ -84,6 +84,49 @@ class DB{
         }
     }
 
+    async get_deleted_users() {
+        // get all the users that are expired, all users in the aux_users table
+        const sql = `SELECT username FROM aux_users`;
+    }
+
+    async add_aux_user() {
+        // insert all the users that are expired into aux_users to delete them later
+        const sql = `INSERT INTO aux_users (id, username) 
+                    SELECT id, username FROM users
+                    WHERE users.date_delete < CURRENT_DATE`;
+
+        try{
+            await this.query(sql);
+        }
+        catch(err){
+            console.log(err);
+        }
+    }
+
+    async delete_user_from_aux_to_users() {
+        // delete all the users that are expired
+        // expire = date_delete < current_date
+        const sql = `DELETE FROM users WHERE id IN (SELECT id FROM aux_users)`;
+
+        try{
+            await this.query(sql);
+        }
+        catch(err){
+            console.log(err);
+        }
+    }
+
+    async delete_aux_users() {
+        const sql = 'DELETE FROM aux_users';
+
+        try{
+            await this.query(sql);
+        }
+        catch(err){
+            console.log(err);
+        }
+    }
+
     async check_user_test(user, password){
         try{
             console.log('check_user_test');
