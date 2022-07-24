@@ -49,7 +49,20 @@ class Main extends AsyncTransfer {
         return data;
     }
 
-
+    static async SetNavMenu(id_nav) {
+        const nav_pages = document.querySelectorAll(`#${id_nav} li a`);
+        nav_pages.forEach(page => {
+            page.addEventListener('click', (e) => {
+                (async () => {
+                    e.preventDefault();
+                    // const path = "https://transfers.insolectric.com" + e.currentTarget.getAttribute('href');
+                    const url = "http://localhost:3000" + e.currentTarget.getAttribute('href');
+                    const replace_id = e.currentTarget.getAttribute('data-replace');
+                    Main.ReplacePage(replace_id, url);
+                })();
+            });
+        });
+    }
 
     static async LoginUser(form, type) {
         let username = document.getElementById('username').value;
@@ -100,8 +113,8 @@ class Main extends AsyncTransfer {
     static async CheckUser(username, password, type) {
         const data = {username: username, password: password, type: type};
 
-        // const json_resp = await AsyncTransfer.PostAPIAsync('http://localhost:3000/api/login', data);
-        const json_resp = await Main.PostAPIAsync('http://localhost:3000/api/login', data);
+        const json_resp = await AsyncTransfer.PostAPIAsync('http://localhost:3000/api/login', data);
+        // const json_resp = await Main.PostAPIAsync('https://transfers.insolectric.com/api/login', data);
 
         return json_resp.code === 200;
     }
@@ -123,6 +136,18 @@ class Main extends AsyncTransfer {
             });
         });
     }
+
+    // static async LogOut(type_logout) {
+    //     const json_resp = await AsyncTransfer.PostAPIAsync('http://localhost:3000/api/logout', {type: type_logout});
+    //     // const json_resp = await Main.PostAPIAsync('https://transfers.insolectric.com/api/logout',  {type: type_logout});
+
+    //     if (json_resp.code === 200) {
+    //         Main.ReplacePage('main-body', 'http://localhost:3000/admin');
+    //     }
+    //     else {
+    //         alert('Error al cerrar sesión');
+    //     }
+    // }
     
     static async DownloadFile(name) {
         const response = await Main.GetAsync('/download/' + name);

@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path');
 const fs = require('fs');
 const router = express.Router();
+const DB = require(path.join(__dirname, '..', 'database', 'database.js'));
 
 const DEBUG = false;
 
@@ -16,15 +17,6 @@ router.get('/login.html', (req, res) => {
         res.render('index.ejs', {is_loged: is_loged});
     else
         res.render('login.ejs', {type: 'user'});
-});
-
-router.get('/admin', (req, res) => {
-    const is_loged = (req.session.adminid || DEBUG); 
-
-    if (is_loged) 
-        res.render('admin.ejs', {is_loged: is_loged});
-    else
-        res.render('login.ejs', {type: 'admin'});
 });
 
 router.use('/', (req, res, next) => {

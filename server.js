@@ -4,6 +4,8 @@ const path = require('path');
 const cookieParser = require("cookie-parser");
 const sessions = require('express-session');
 
+const { setup_cron } = require(path.join(__dirname, 'setup.js'));
+
 // Import variables from .env
 require('dotenv').config();
 
@@ -24,14 +26,12 @@ app.use(express.urlencoded({ extended: true }));
 // cookie parser middleware
 app.use(cookieParser());
 
-// app.use(express.static(path.join(__dirname, 'public')));
-// app.use('/api', require(path.join(__dirname, 'router', 'Rutas.js')));
-
+app.use('/admin', require(path.join(__dirname, 'router', 'Admin.js')));
 app.use('/api', require(path.join(__dirname, 'router', 'API.js')));
 app.use('/', require(path.join(__dirname, 'router', 'Rutas.js')));
 
 app.listen(3000, () => { 
-    console.log('Server is running on port 3000'); 
+    console.log('Server is running'); 
 });
 
-
+setup_cron();

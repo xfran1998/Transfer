@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin</title>
+</head>
+<body id="main-body">
+    <h1>Admin Panel</h1>
+    <nav id="nav-menu">
+        <ul>
+            <li><a data-replace="admin-body" href="/admin/users">Usuarios</a></li>
+            <li><a data-replace="admin-body" href="/admin/carpetas">Carpetas</a></li>
+            <li><a data-replace="main-body" href="/admin/logout">Logout</a></li>
+        </ul>
+    </nav>
+    <div id="admin-body">
+
+    </div>
+    <script type="module">
+        import { Main } from "/js/main.js";
+        // Main.ReplacePage('admin-body', 'https://tranfers.insolectric.com/admin/users');
+        Main.ReplacePage('admin-body', 'http://localhost:3000/admin/users');
+        Main.SetNavMenu('nav-menu');
+    </script>
+</body>
+</html>

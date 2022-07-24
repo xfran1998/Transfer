@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Usuarios</title>
+</head>
+<body>
+    <form id="create_user" action="/api/create_user" method="post">
+        <label for="user">User</label>
+        <input type="text" name="user" id="user" required>
+        <label for="password">Password</label>
+        <input type="text" name="password" id="password" required>
+        <label for="del_date">Delete Date</label>
+        <input type="date" name="del_date" id="del_date">
+        <input type="submit" value="Create">
+    </form>
+    <table>
+        <thead>
+            <tr>
+                <th></th>
+                <th>Admin</th>
+                <th>Activo</th>
+                <th>Usuario</th>
+                <th>Contraseña</th>
+                <th>Fecha Borrado</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+    <% users.forEach( (user) => { %>
+        <tr>
+            <td></td>
+        <% Object.keys(user).forEach( (key) => {
+            let type = 'text';
+            let extra = '';
+    
+            if (key === 'date_delete' && user[key] !== null) {
+                user[key] = user[key].toISOString().slice(0, 10);
+            } 
+    
+            switch (key) {
+                case 'id':
+                    type = 'hidden';
+                    break;
+                case 'password':
+                    type = 'password';
+                    break;
+                case 'date_delete':
+                    type = 'date';
+                    break;
+                case 'admin':
+                case 'active':
+                    type = 'checkbox';
+                    if (user[key] === 1) {
+                        extra = 'checked';
+                    }
+                    break;
+            }
+            if (key === 'id') {  
+                extra = 'disabled'; %>
+                <input type="<%= type %>" name="<%= key %>" value="<%= user[key] %>" <%= extra %>>
+            <% } 
+            else {%>
+            <td><input type="<%= type %>" name="<%= key %>" value="<%= user[key] %>" <%= extra %>></td>
+            <% }
+            }); %>
+        </tr>
+     <% }); %> 
+        </tbody>
+    </table>
+    <script type="module">
+        import { Main } from "/js/main.js";
+        Main.PostForm('create_user');
+    </script>
+</body>
+</html>

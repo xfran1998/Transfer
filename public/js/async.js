@@ -32,6 +32,12 @@ class AsyncTransfer {
         return html;
     }
 
+    static async ReplaceTittle(html_fetched) {
+        const title = html_fetched.match(/<title>(.*?)<\/title>/i)[1];
+        document.title = title;
+    }
+
+
     static async GetAPIAsync(url_page) {
         const response = await AsyncTransfer.GetAsync(url_page);
 
@@ -58,13 +64,15 @@ class AsyncTransfer {
 
     static async ReplacePage(id_replace, url_page) {
         let page_html = await AsyncTransfer.GetPageAsync(url_page);
+        AsyncTransfer.ReplaceTittle(page_html);
 
         document.getElementById(id_replace).innerHTML = page_html;
-        AsyncTransfer.CallScripts();
+        AsyncTransfer.CallScripts(id_replace);
+        console.log('replace page');
     }
 
-    static async CallScripts() {
-        let scripts = document.querySelectorAll('script');
+    static async CallScripts(id_replace) {
+        let scripts = document.querySelectorAll(`#${id_replace} script`);
 
         // call scripts
         scripts.forEach(script => {

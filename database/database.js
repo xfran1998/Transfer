@@ -1,5 +1,6 @@
 const mysql = require('mysql');
 const bcrypt = require("bcrypt");
+const { clearCache } = require('ejs');
 
 class DB{
     constructor(){
@@ -7,7 +8,8 @@ class DB{
             host: process.env.DB_HOST,
             user: process.env.DB_USERNAME,
             password: process.env.DB_PASSWORD,
-            database: process.env.DB_DATABASE
+            database: process.env.DB_DATABASE,
+            timezone: 'utc'
         });
     }
 
@@ -40,11 +42,31 @@ class DB{
         });
     }
 
+    async get_all_users() {
+        try {
+            const sql = `SELECT * FROM users`;
+            const rows = await this.query(sql);
+
+            return rows;
+        }
+        catch(err){
+            console.log(err);
+            return [];
+        }
+    }
+
     async get_user_by_username(username){
-        const sql = 'SELECT * FROM users WHERE username = ? AND active = 1';
-        const args = [username];
-        const rows = await this.query(sql, args);
-        return rows[0];
+        try {
+            const sql = 'SELECT * FROM users WHERE username = ? AND active = 1';
+            const args = [username];
+            const rows = await this.query(sql, args);
+            return rows[0];
+        }
+        catch(err){
+            console.log(err);
+            return null;
+        }
+
     }
 
     async check_user(user, password, admin){
@@ -86,7 +108,15 @@ class DB{
 
     async get_deleted_users() {
         // get all the users that are expired, all users in the aux_users table
-        const sql = `SELECT username FROM aux_users`;
+        try {
+            const sql = `SELECT username FROM aux_users`;
+            const rows = await this.query(sql);
+            return rows;
+        }
+        catch(err){
+            console.log(err);
+            return [];
+        }
     }
 
     async add_aux_user() {
