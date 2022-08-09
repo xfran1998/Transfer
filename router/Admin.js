@@ -34,10 +34,22 @@ router.get('/users', (req, res) => {
     }  
 });
 
-router.get('/carpetas', (req, res) => {
-    console.log('carpetas');
+router.get('/folders', (req, res) => {
+    console.log('get folders');
     try {
-        res.render(res.render(path.join('admin', 'carpetas.ejs')));
+        (async () => {
+            const db_conn = new DB();
+            const users = await db_conn.get_all_users();
+            db_conn.close();
+
+            let folders = [];
+            users.forEach(user => {
+                folders.push(user.username);
+            });
+        
+            console.table(folders);
+            res.render(path.join('admin', 'folders.ejs'), {folders: folders});
+        })();  
     }
     catch(error) {
         console.log(error);

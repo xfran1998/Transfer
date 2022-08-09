@@ -1,6 +1,9 @@
 import { AsyncTransfer } from "./async.js";
 
 class Main extends AsyncTransfer {
+    static history = [];
+    static index = 0;
+
     static PostFormLogin(type) {
         let form = document.getElementById('login-form');
         console.log(form);
@@ -62,6 +65,71 @@ class Main extends AsyncTransfer {
                 })();
             });
         });
+    }
+
+    static async SetNavMenuSPA(id_nav) {
+        // history.replaceState({url: 'http://localhost:3000/admin/', replace_id: 'admin-body'}, null, '/admin/#users');
+        const nav_pages = document.querySelectorAll(`#${id_nav} li a`);
+        nav_pages.forEach(page => {
+            page.addEventListener('click', (e) => {
+                (async () => {
+                    e.preventDefault();
+
+                    // const path = "https://transfers.insolectric.com" + e.currentTarget.getAttribute('href');
+                    const url = "http://localhost:3000" + e.currentTarget.getAttribute('href');
+                    const url2 = e.currentTarget.getAttribute('href').split('/').at(-1);
+                    const replace_id = e.currentTarget.getAttribute('data-replace');
+                    window.history.pushState({url: url, replace_id: replace_id}, '', `/admin/#${url2}`);
+
+                    Main.ReplacePage(replace_id, url);
+                })();
+            });
+        });
+
+    }
+
+    static async SetBackButtonSPA() {
+
+        window.addEventListener('popstate', (e) => {
+            (async () => {
+                console.log(e.state);
+                if (e.state) {
+                    const url = e.state.url;
+                    const replace_id = e.state.replace_id;
+
+                    Main.ReplacePage(replace_id, url);
+                }
+                else {
+                    Main.ReplacePage('admin-body', 'http://localhost:3000/admin/users');
+                }
+            })();
+        });
+    }
+
+    static async AdminInit() {
+        await Main.LoadOnRefreshSPA();
+        // Main.ReplacePage('admin-body', 'https://tranfers.insolectric.com/admin/users');
+        // Main.ReplacePage('admin-body', 'http://localhost:3000/admin/users');
+        Main.SetNavMenuSPA('nav-menu');
+        Main.SetBackButtonSPA(); 
+    }
+
+    static async LoadOnRefreshSPA() {
+        var url = window.location.href;
+        url = url.split('/').at(-1);
+        url = url.replace('#', "");
+        
+        if(url == 'admin' || url == 'logout') url = 'users';
+        window.history.pushState({url: 'http://localhost:3000/admin/#users', replace_id: 'admin-body'}, '', `/admin/#${url}`);
+        // replace # with ''
+        // window.history.replaceState({url: 'http://localhost:3000/admin/#users', replace_id: 'admin-body'}, '', `/admin/${url}`);
+
+        if (url) {
+            Main.ReplacePage('admin-body', `/admin/${url}`);
+        }
+        else{
+            Main.ReplacePage('admin-body', '/admin/users');
+        }
     }
 
     static async LoginUser(form, type) {
@@ -157,6 +225,35 @@ class Main extends AsyncTransfer {
         link.href = url;
         link.download = name;
         link.click();
+    }
+
+    static async SetFolderSettings() {
+        const folder_info = document.querySelectorAll('.folder-info');
+        const folder_view = document.querySelectorAll('.folder-view');
+
+        folder_info.forEach(folder => {
+            folder.addEventListener('click', (e) => {
+                e.preventDefault();
+                (async () => {
+                    const url = e.currentTarget.getAttribute('href');
+                    const json_resp = await Main.GetAPIAsync(url);
+                    console.log('info');
+                    console.log(json_resp);
+                })();
+            });
+        });     
+        
+        folder_view.forEach(folder => {
+            folder.addEventListener('click', (e) => {
+                e.preventDefault();
+                (async () => {
+                    const url = e.currentTarget.getAttribute('href');
+                    const json_resp = await Main.GetAPIAsync(url);
+                    console.log('view');
+                    console.log(json_resp);
+                })();
+            });
+        });     
     }
 }
 

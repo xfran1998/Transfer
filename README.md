@@ -1,3 +1,14 @@
+# TODO:
+## Importantes
+- [ ] Mostrar el contenido dentro del subdiv "folder-container"
+- [ ] Ver Carpeta De usuarios
+- [ ] Generar div para cada archivo
+-  - [ ] Boton para cambiar informacion
+-  - [ ] Boton para eliminar el archivo
+## Extra
+- [ ] Boton para ir atrás
+
+
 # Transfer web
 New prototype for web transfer files
 

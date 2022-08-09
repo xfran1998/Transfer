@@ -11,7 +11,7 @@
     <nav id="nav-menu">
         <ul>
             <li><a data-replace="admin-body" href="/admin/users">Usuarios</a></li>
-            <li><a data-replace="admin-body" href="/admin/carpetas">Carpetas</a></li>
+            <li><a data-replace="admin-body" href="/admin/folders">Carpetas</a></li>
             <li><a data-replace="main-body" href="/admin/logout">Logout</a></li>
         </ul>
     </nav>
@@ -20,9 +20,9 @@
     </div>
     <script type="module">
         import { Main } from "/js/main.js";
-        // Main.ReplacePage('admin-body', 'https://tranfers.insolectric.com/admin/users');
-        Main.ReplacePage('admin-body', 'http://localhost:3000/admin/users');
-        Main.SetNavMenu('nav-menu');
+
+        Main.AdminInit();
+        
     </script>
 </body>
 </html>
