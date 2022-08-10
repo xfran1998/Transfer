@@ -7,8 +7,8 @@ const DB = require(path.join(__dirname, '..', 'database', 'database.js'));
 const DEBUG = false;
 
 router.use('/js', express.static(path.join(__dirname, '..', 'public', 'js')));
-
 router.use('/css', express.static(path.join(__dirname, '..', 'public', 'css')));
+router.use('/img', express.static(path.join(__dirname, '..', 'public', 'img')));
 
 router.get('/login.html', (req, res) => {
     console.log('get login');

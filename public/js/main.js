@@ -1,4 +1,5 @@
 import { AsyncTransfer } from "./async.js";
+import { Files } from "./files.js";
 
 class Main extends AsyncTransfer {
     static history = [];
@@ -77,6 +78,14 @@ class Main extends AsyncTransfer {
 
                     // const path = "https://transfers.insolectric.com" + e.currentTarget.getAttribute('href');
                     const url = "http://localhost:3000" + e.currentTarget.getAttribute('href');
+                    const current = window.location.href;
+
+                    if (url == current) {
+                        const replace_id = e.currentTarget.getAttribute('data-replace');
+                        Main.ReplacePage(replace_id, url);
+                        return;
+                    }
+
                     const url2 = e.currentTarget.getAttribute('href').split('/').at(-1);
                     const replace_id = e.currentTarget.getAttribute('data-replace');
                     window.history.pushState({url: url, replace_id: replace_id}, '', `/admin/#${url2}`);
@@ -249,8 +258,8 @@ class Main extends AsyncTransfer {
                 (async () => {
                     const url = e.currentTarget.getAttribute('href');
                     const json_resp = await Main.GetAPIAsync(url);
-                    console.log('view');
                     console.log(json_resp);
+                    Files.GenerateFolderPage(json_resp.info);
                 })();
             });
         });     

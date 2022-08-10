@@ -24,11 +24,21 @@ class AsyncTransfer {
         return response;
     }
 
+    static async PostFilesAsync(url_page, data) {
+        const response = await fetch(url_page, {
+                method: 'POST',
+                body: data
+            }
+        )
+
+        const json = await response.json();
+        return json;
+    }
+
     static async GetPageAsync(url_page) {
         const response = await AsyncTransfer.GetAsync(url_page);
 
         const html = await response.text();
-
         return html;
     }
 
@@ -42,7 +52,6 @@ class AsyncTransfer {
         const response = await AsyncTransfer.GetAsync(url_page);
 
         const json = await response.json();
-
         return json;
     }
 
@@ -50,7 +59,6 @@ class AsyncTransfer {
         const response = await AsyncTransfer.PostAsync(url_page, 'application/json', JSON.stringify(data));
 
         const json = await response.json();
-
         return json;
     }
 
@@ -58,7 +66,6 @@ class AsyncTransfer {
         const response = await AsyncTransfer.PostAsync(url_page, 'application/x-www-urlencoded', data);
 
         const text = await response.text();
-
         return text;
     }
 

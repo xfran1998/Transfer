@@ -1,12 +1,23 @@
 # TODO:
 ## Importantes
-- [ ] Mostrar el contenido dentro del subdiv "folder-container"
-- [ ] Ver Carpeta De usuarios
-- [ ] Generar div para cada archivo
--  - [ ] Boton para cambiar informacion
--  - [ ] Boton para eliminar el archivo
+- [x] Mostrar el contenido dentro del subdiv "folder-container"
+- [x] Ver Carpeta De usuarios
+- [x] Generar div para cada archivo
+    - [ ] Boton para cambiar informacion
+    - [x] Boton para eliminar el archivo
+- [ ] Refrescar solo la página de archvio una vez se ejecura una accion
 ## Extra
+- [ ] Animacion de carga mientras se suben los archivos
 - [ ] Boton para ir atrás
+- [ ] Pop up para mostrar lo ocurrido en las acciones
+- [ ] Agregar estilos
+    - [ ] Estilo nav
+    - [ ] Estilo boton
+    - [ ] Estilo inner usuarios
+    - [ ] Estilo inner archivos
+    - [ ] Estilo inner carpeta
+    - [ ] Estilo login
+- [ ] Agregar responsive
 
 
 # Transfer web

@@ -4,6 +4,7 @@ const fs = require('fs');
 const router = express.Router();
 const DB = require(path.join(__dirname, '..', 'database', 'database.js'));
 
+
 router.use('/', (req, res, next) => {
     console.log('get admin1');
     // get url
@@ -17,6 +18,10 @@ router.use('/', (req, res, next) => {
     }
     next();
 });
+
+// router.use('/js', express.static(path.join(__dirname, '..', 'public', 'js')));
+// router.use('/css', express.static(path.join(__dirname, '..', 'public', 'css')));
+// router.use('/img', express.static(path.join(__dirname, '..', 'public', 'img')));
 
 router.get('/users', (req, res) => {
     console.log('users');

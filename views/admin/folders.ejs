@@ -4,17 +4,20 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://kit.fontawesome.com/4d71df5d1c.js" crossorigin="anonymous"></script>
     <title>Carpetas</title>
 </head>
 <body>
     <h1>Carpetas</h1>
-    <% folders.forEach(folder => { %>
-        <div class="folder">
-            <h2><%= folder%></h2>
-            <a class="folder-info" href="/api/admin/folders/info/<%= folder%>">Info</a>
-            <a class="folder-view" href="/api/admin/folders/files/<%= folder%>">Ver carpeta</a>
-        </div>
-    <% }) %>
+    <div id="folder-container">
+        <% folders.forEach(folder => { %>
+            <div class="folder">
+                <h2><%= folder%></h2>
+                <a class="folder-info" href="/api/admin/folders/info/<%= folder%>">Info</a>
+                <a class="folder-view" href="/api/admin/folders/files/<%= folder%>">Ver carpeta</a>
+            </div>
+        <% }) %>
+    </div>
     <script>
         import { Main } from "/js/main.js";
         Main.SetFolderSettings('nav-menu');
