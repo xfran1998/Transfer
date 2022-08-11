@@ -9,6 +9,7 @@
 <body id="main-body">
     <h1>Login</h1>
     <form action="api/login" method="post" id="login-form">
+        <input id="login-type" type="hidden" value="<%= type %>">
         <label for="username">Username:</label>
         <input type="text" name="username" id="username">
         <label for="password">Password:</label>
@@ -16,10 +17,7 @@
         <input type="hidden" name="type" value="<%= type %>">
         <input type="submit" value="Login">
     </form>    
-    <script type="module">
-        import { Main } from "/js/main.js"; 
-
-        Main.PostFormLogin('<%= type %>');   
-    </script>
+    <!-- <script type="module" src="./js/main.js"></script> -->
+    <script type="module" src="/js/login_init.js"></script>
 </body>
 </html>

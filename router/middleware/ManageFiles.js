@@ -24,13 +24,13 @@ const fileSizeLimiter = (req, res, next) => {
 
     if (!filesNotAllowed.length) return next(); // no files were not allowed
 
-    let string_msg = 'The following files were not uploaded: '; 
+    let string_msg = '<p style="font-size: 1.4rem">Files size greater 1GB:</p>'; 
     filesNotAllowed.forEach(file => {
-        string_msg += file + ', ';
+        string_msg += '<p>' + file + '</p>';
     } );
 
-    string_msg = string_msg.slice(0, -2);
-    string_msg += '.';
+    // string_msg = string_msg.slice(0, -2);
+    // string_msg += '.';
     
 
     return res.status(400).json({status: 'error', message: string_msg}); // some files were not allowed
@@ -51,9 +51,9 @@ const fileTypeLimiter = (req, res, next) => {
 
     if (!extNotAllowed.length) return next(); // no files were not allowed
 
-    let string_msg = 'The following files were not uploaded: ';
+    let string_msg = '<p style="font-size: 1.4rem">Types not allowed:</p>';
     extNotAllowed.forEach(file => {
-        string_msg += file + ', ';
+        string_msg += '<p>' + file + '</p>';
     } );
 
     string_msg = string_msg.slice(0, -2);

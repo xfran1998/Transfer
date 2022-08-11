@@ -23,6 +23,26 @@ body{
     background-color: rgba(249, 220, 196, 0.25);
     transition: all 0.3s ease-in-out;
 }
+div div p a#NXReportButton.notiflix-report-button{
+    border-radius: 50px !important;
+}
+
+.file-btn i{
+    pointer-events: none;
+}
+
+#folder-container{
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.full-w {
+    width: 100vw;
+}
+
+.all-w{
+    width: 100%;
+}
 
 .file-container {
     display: flex;

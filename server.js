@@ -3,11 +3,15 @@ const app = express();
 const path = require('path');
 const cookieParser = require("cookie-parser");
 const sessions = require('express-session');
+// const Bundler = require('parcel-bundler');
 
 const { setup_cron } = require(path.join(__dirname, 'setup.js'));
 
 // Import variables from .env
 require('dotenv').config();
+
+// const bundlerOptions = { production: process.env.NODE_ENV === 'production' };
+// const bundler        = new Bundler( filePath, bundlerOptions );
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
