@@ -10,7 +10,8 @@ module.exports = {
 		admin_init: ['./src/admin_init.js'],
 		users_init: ['./src/users_init.js'],
 		login_init: ['./src/login_init.js'],
-		folders_init: ['./src/folders_init.js']
+		folders_init: ['./src/folders_init.js'],
+		user_panel_init: ['./src/user_panel_init.js'],
 	},
 	output: {
 		path: path.resolve(__dirname, 'public', 'js'),

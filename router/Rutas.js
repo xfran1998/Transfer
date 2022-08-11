@@ -10,28 +10,27 @@ router.use('/js', express.static(path.join(__dirname, '..', 'public', 'js')));
 router.use('/css', express.static(path.join(__dirname, '..', 'public', 'css')));
 router.use('/img', express.static(path.join(__dirname, '..', 'public', 'img')));
 
+router.use('/', (req, res, next) => {
+    console.log('login user');
+    // get url
+    const url = req.url;
+    
+    const is_loged = (req.session.userid);
+    if (!is_loged) {
+        console.log('login user');
+        res.render('login.ejs', {type: 'user'}); 
+        return;
+    }
+    next();
+});
+
 router.get('/login.html', (req, res) => {
     console.log('get login');
     const is_loged = (req.session.userid || DEBUG); 
     if (is_loged) 
-        res.render('index.ejs', {is_loged: is_loged});
+        res.redirect('/');
     else
         res.render('login.ejs', {type: 'user'});
-});
-
-router.use('/', (req, res, next) => {
-    // send all static files required of the html
-    if (req.url === '/' || req.url === '/index.html') {
-        const data = { is_loged: (req.session.userid || DEBUG) };
-        if (data.is_loged) {
-            data.files = GetFilesFromFolder(path.join(__dirname, '..', 'transfer', req.session.userid));
-        }
-    
-        res.render('index.ejs', data);
-    }
-    else{
-        next();
-    }    
 });
 
 router.get('/download/:file', (req, res) => {
@@ -48,6 +47,25 @@ router.get('/download/:file', (req, res) => {
             res.download(path.join(__dirname, '..', 'transfer', req.session.userid, file));
         }
     }
+});
+
+router.use('/', (req, res, next) => {
+    // send all static files required of the html
+    // if (req.url === '/' || req.url === '/index.html') {
+    //     const data = { is_loged: (req.session.userid || DEBUG) };
+    //     if (data.is_loged) {
+    //         data.files = GetFilesFromFolder(path.join(__dirname, '..', 'transfer', req.session.userid));
+    //     }
+    
+    //     res.render('index.ejs', data);
+    // }
+    // else{
+    //     next();
+    // }    
+    const data = { is_loged: req.session.userid };
+    data.files = GetFilesFromFolder(path.join(__dirname, '..', 'transfer', req.session.userid));
+    
+    res.render('index.ejs', data);
 });
 
 router.use((req, res) => {

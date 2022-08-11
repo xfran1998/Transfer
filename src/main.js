@@ -28,6 +28,7 @@ class Main extends AsyncTransfer {
     static async PostData(form) {
         const url = form.getAttribute('action');
         const data = Main.GetDataForm(form);
+        console.log('url:', url);
         
         // check if url string contains 'api'
         if (url.includes('api')) {
@@ -60,7 +61,8 @@ class Main extends AsyncTransfer {
                 (async () => {
                     e.preventDefault();
                     // const path = "https://transfers.insolectric.com" + e.currentTarget.getAttribute('href');
-                    const url = "http://localhost:3000" + e.currentTarget.getAttribute('href');
+                    // ------ const url = "http://localhost:3000" + e.currentTarget.getAttribute('href');
+                    const url = e.currentTarget.getAttribute('href');
                     const replace_id = e.currentTarget.getAttribute('data-replace');
                     Main.ReplacePage(replace_id, url);
                 })();
@@ -77,7 +79,8 @@ class Main extends AsyncTransfer {
                     e.preventDefault();
 
                     // const path = "https://transfers.insolectric.com" + e.currentTarget.getAttribute('href');
-                    const url = "http://localhost:3000" + e.currentTarget.getAttribute('href');
+                    // ------ const url = "http://localhost:3000" + e.currentTarget.getAttribute('href');
+                    const url = e.currentTarget.getAttribute('href');
                     const current = window.location.href;
 
                     if (url == current) {
@@ -109,7 +112,8 @@ class Main extends AsyncTransfer {
                     Main.ReplacePage(replace_id, url);
                 }
                 else {
-                    Main.ReplacePage('admin-body', 'http://localhost:3000/admin/users');
+                    // ------ Main.ReplacePage('admin-body', 'http://localhost:3000/admin/users');
+                    Main.ReplacePage('admin-body', '/admin/users');
                 }
             })();
         });
@@ -192,7 +196,7 @@ class Main extends AsyncTransfer {
     static async CheckUser(username, password, type) {
         const data = {username: username, password: password, type: type};
 
-        const json_resp = await AsyncTransfer.PostAPIAsync('http://localhost:3000/api/login', data);
+        const json_resp = await AsyncTransfer.PostAPIAsync('/api/login', data);
         // const json_resp = await Main.PostAPIAsync('https://transfers.insolectric.com/api/login', data);
 
         return json_resp.code === 200;
@@ -259,9 +263,7 @@ class Main extends AsyncTransfer {
                 e.preventDefault();
                 (async () => {
                     const url = e.currentTarget.getAttribute('href');
-                    const json_resp = await Main.GetAPIAsync(url);
-                    console.log(json_resp);
-                    Files.GenerateFolderPage(json_resp.info);
+                    Files.LoadFolderUsers(url);
                 })();
             });
         });     

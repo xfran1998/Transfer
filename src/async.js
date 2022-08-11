@@ -56,6 +56,7 @@ class AsyncTransfer {
     }
 
     static async PostAPIAsync(url_page, data) {
+        console.log('url_page: ' + url_page);
         const response = await AsyncTransfer.PostAsync(url_page, 'application/json', JSON.stringify(data));
 
         const json = await response.json();
@@ -86,7 +87,8 @@ class AsyncTransfer {
             // console.log('script1: ' + src);
             if (src) { // if script has src
                 ( async () => {
-                    const url = "http://localhost:3000" + src;
+                    // const url = "http://localhost:3000" + src;
+                    const url = src;
                     let script_html = await AsyncTransfer.GetPageAsync(src);
                     eval(script_html);
                 })();

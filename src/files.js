@@ -2,6 +2,7 @@
 import { AsyncTransfer } from "./async.js";
 import { Loading } from 'notiflix/build/notiflix-loading-aio';
 import { Report } from 'notiflix/build/notiflix-report-aio';
+import { Block } from 'notiflix/build/notiflix-block-aio';
 
 const toggleC = (element, className) => element.classList.toggle(className);
 const addC = (element, className) => element.classList.add(className);
@@ -12,6 +13,30 @@ const preventD = (event) => event.preventDefault();
 // console.log(LoadingPopUp);
 
 class Files {
+    static user_url = '';
+    static async LoadFolderUsers(url){
+        Files.user_url = url;
+        const json_resp = await AsyncTransfer.GetAPIAsync(url);
+        console.log(json_resp);
+        Files.GenerateFolderPage(json_resp.info);
+    }
+
+    static async ReloadFolder(){
+        // Animation bloquing folder container
+        console.log('Reloading folder');
+        Block.standard('#admin-body', 'Cargando...', {
+            border: '1px solid #ccc',
+            backgroundColor: 'rgba(240,240,240,0.8)',
+            svgSize: '39px',
+        });
+
+        const json_resp = await AsyncTransfer.GetAPIAsync(Files.user_url);
+        await Files.GenerateFolderPage(json_resp.info);
+        
+        //  Disable animation folder containe
+        Block.remove('#admin-body');
+    }
+
     static async GenerateFileDrop(owner) {
         var folder_container = document.getElementById('folder-container');
         folder_container.innerHTML = '<div class="all-w"></div>';
@@ -61,7 +86,7 @@ class Files {
 
             // formData.append('owner', owner);
 
-            const url = `http://localhost:3000/api/admin/files/upload`;
+            const url = `/api/admin/files/upload`;
             const json_resp = await AsyncTransfer.PostFilesAsync(url, formData);
             console.log(json_resp);
             Loading.remove(200);
@@ -82,9 +107,11 @@ class Files {
                     'Todo correcto',
                     'Ficheros subidos correctamente',
                     'Okay',
+                    () => {
+                        Files.ReloadFolder();
+                    }
                 )
             }
-
         });
 
         folder_container.appendChild(drop_items);
@@ -131,7 +158,7 @@ class Files {
         // edit: {type: '', name: ''} <object> | what to edit and how
         // type: 'rename' or 'move'
         
-        const url = `http://localhost:3000/api/admin/files/edit`;
+        const url = `/api/admin/files/edit`;
         const json_resp = await AsyncTransfer.PostAPIAsync(url, {owner, file, edit});
         console.log(json_resp);
 
@@ -152,7 +179,7 @@ class Files {
     static TemplateFileContainer(owner, file){
         return `
             <div class="file-icon">
-                <img src="http://localhost:3000/img/icon_file.svg" alt="file">
+                <img src="/img/icon_file.svg" alt="file">
                 <div class="file-buttons">
                     <button class="file-btn file-edit" data-user="${owner}" data-file="${file.name}"><i class="fa-solid fa-file-pen"></i></button>
                     <button class="file-btn file-delete" data-user="${owner}" data-file="${file.name}"><i class="fa-solid fa-trash"></i></button>
