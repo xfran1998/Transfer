@@ -72,7 +72,7 @@ router.post('/admin/files/edit', (req, res) => {
         return;
     }
 
-    console.table({owner, file, edit});
+    // console.table({owner, file, edit});
 });
 
 router.post('/admin/files/upload', 
@@ -83,7 +83,7 @@ router.post('/admin/files/upload',
     (req, res) => {
         console.log('upload file:', req.body.owner);
         const files = req.files;
-        console.table(files);
+        // console.table(files);
     
         // save file in transfer folder
         const path_folder = path.join(__dirname, '..', 'transfer', req.body.owner);
@@ -138,7 +138,7 @@ router.get('/admin/folders/files/:id', (req, res) => {
             let info = {};
             info.files = get_files_from_folder(req.params.id);
             info.name = req.params.id;
-            console.table(info);
+            // console.table(info);
             res.send({code: 200, message: 'ok', info: info});
             // res.render(path.join('admin', 'folders.ejs', {info: info}));
         })();  

@@ -93,7 +93,7 @@ class DB{
         try{
             const hash_password = bcrypt.hashSync(password, 10);
     
-            const sql = 'INSERT INTO users (username, password, date_delete) VALUES (?, ?, ?)';
+            const sql = 'INSERT INTO users (active, username, password, date_delete) VALUES (1, ?, ?, ?)';
             const args = [user, hash_password, del_date];
             const rows = await this.query(sql, args);
             console.log(JSON.stringify(rows));

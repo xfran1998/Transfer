@@ -101,7 +101,6 @@ class Main extends AsyncTransfer {
     }
 
     static async SetBackButtonSPA() {
-
         window.addEventListener('popstate', (e) => {
             (async () => {
                 console.log(e.state);
@@ -207,17 +206,35 @@ class Main extends AsyncTransfer {
     }
 
     static SetButtonsDownload() {
-        let buttons = document.querySelectorAll('.btn-download');
+        let buttons = document.querySelectorAll('.file-download');
 
         buttons.forEach(button => {
             button.addEventListener('click', (e) => {
                 e.preventDefault();
 
-                const name = e.target.getAttribute('data-name');
+                const name = e.target.getAttribute('data-file');
                 console.log(name);
                 Main.DownloadFile(name);
             });
         });
+    }
+
+    static async SetLogout() {
+        console.log('logout');
+        const logout = document.getElementById('logout');
+        logout.addEventListener('click', (e) => {
+            e.preventDefault();
+            (async() => {
+                const json_resp = await AsyncTransfer.PostAPIAsync('/api/logout', {type: 'user'});
+                // const json_resp = await Main.PostAPIAsync('https://transfers.insolectric.com/api/login', data);
+
+                if (json_resp.code === 200) 
+                    window.location.reload();
+                else
+                    alert('Error');
+                // window.location.href = '/api/logout';
+            })();
+        } );
     }
 
     // static async LogOut(type_logout) {

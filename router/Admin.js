@@ -52,7 +52,7 @@ router.get('/folders', (req, res) => {
                 folders.push(user.username);
             });
         
-            console.table(folders);
+            // console.table(folders);
             res.render(path.join('admin', 'folders.ejs'), {folders: folders});
         })();  
     }

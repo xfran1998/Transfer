@@ -5,14 +5,32 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- <script src="/js/main.js" type="module"></script> -->
+    <script src="https://kit.fontawesome.com/4d71df5d1c.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="/css/style.css">
     <title>Transferencias Insolectric</title>
 </head>
-<body id="main-body">
-    <h1 id="test-div">Files</h1>
-    <% files.forEach( (file) => { %>
-        <button class="btn-download" data-name="<%= file %>">--> <%= file %></button> <br><br>
-    <% }) %>
-
+<body id="main-body" class="user-body">
+    <nav id="user-nav">
+        <img src="/img/insolectric-logo.png" alt="logo" class="logo-h1">
+        <h1>Transfer</h1>
+        <i id="logout" class="fa-solid fa-arrow-right-from-bracket"></i>
+    </nav>
+    <div id="folder-container">
+        <% files.forEach( (file) => { %>
+            <div class="file-container">
+                <div class="file-icon">
+                    <img src="/img/icon_<%= file.split('.').at(-1) %>.svg" alt="file">
+                    <div class="file-buttons">
+                        <button class="file-btn-client file-download" data-file="<%= file %>"><i class="fa-solid fa-file-arrow-down"></i></button>
+                    </div>
+                </div>
+                <div class="file-info">
+                    <p class="text-name-file"><%= file %></p>
+                    <p class="hidden-name-file"><%= file %></p>
+                </div>
+            </div>
+        <% }) %>
+    </div>
     <script type="module" src="./js/user_panel_init.js"></script>
 </body>
 </html>
