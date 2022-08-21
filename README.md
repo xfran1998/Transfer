@@ -5,20 +5,24 @@
 - [x] Generar div para cada archivo
     - [ ] Boton para cambiar informacion
     - [x] Boton para eliminar el archivo
-- [ ] Refrescar solo la página de archvio una vez se ejecura una accion
+- [x] Refrescar solo la página de archvio una vez se ejecura una accion
 ## Extra
-- [ ] Animacion de carga mientras se suben los archivos
+- [x] Animacion de carga mientras se suben los archivos
 - [ ] Boton para ir atrás
-- [ ] Pop up para mostrar lo ocurrido en las acciones
+- [x] Pop up para mostrar lo ocurrido en las acciones
 - [ ] Agregar estilos
     - [ ] Estilo nav
-    - [ ] Estilo boton
+    - [x] Estilo boton
     - [ ] Estilo inner usuarios
-    - [ ] Estilo inner archivos
-    - [ ] Estilo inner carpeta
-    - [ ] Estilo login
+    - [x] Estilo inner carpeta
+    - [ ] Estilo inner archivos (Queda por retocar)
+    - [x] Estilo login
 - [ ] Agregar responsive
-
+- [ ] Agregar tamaño maximo (UI usuarios)
+    - [ ] Crear usuario con tamaño máximo (Posible campo vacio, no tiene tamaño máximo)
+- [ ] Controlar tamaño maximo
+    - [ ] Controlar tamaño máximo de los usuarios
+    - [ ] Controlar tamaño máximo del servidor
 
 # Transfer web
 New prototype for web transfer files
