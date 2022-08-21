@@ -3,6 +3,7 @@ const app = express();
 const path = require('path');
 const cookieParser = require("cookie-parser");
 const sessions = require('express-session');
+const DLog = require(path.join(__dirname, 'utils', 'dlog.js'));
 // const Bundler = require('parcel-bundler');
 
 const { setup_cron } = require(path.join(__dirname, 'setup.js'));
@@ -37,5 +38,7 @@ app.use('/', require(path.join(__dirname, 'router', 'Rutas.js')));
 app.listen(3000, () => { 
     console.log('Server is running'); 
 });
+
+// DLog.debug_all();
 
 setup_cron();

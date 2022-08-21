@@ -1,6 +1,5 @@
 const mysql = require('mysql');
 const bcrypt = require("bcrypt");
-const { clearCache } = require('ejs');
 
 class DB{
     constructor(){
@@ -147,13 +146,51 @@ class DB{
     }
 
     async delete_aux_users() {
-        const sql = 'DELETE FROM aux_users';
-
         try{
+            const sql = 'DELETE FROM aux_users';
             await this.query(sql);
         }
         catch(err){
             console.log(err);
+        }
+    }
+
+    async get_user_size(user){
+        try{
+            const sql = 'SELECT size, max_space FROM users WHERE username = ?';
+            const args = [user];
+            const rows = await this.query(sql, args);
+            return rows[0];
+        }
+        catch(err){
+            console.log(err);
+            return 0;
+        }
+    }
+
+    async set_user_size(user, size){
+        try{
+            const sql = 'UPDATE users SET size = ? WHERE username = ?';
+            const args = [size, user];
+            const rows = await this.query(sql, args);
+            return rows;
+        }
+        catch(err){
+            console.log(err);
+            return 0;
+        }
+    }
+
+    async set_user_max_space(user, max_space){
+        try{
+            const sql = 'UPDATE users SET max_space = ? WHERE username = ?';
+            const args = [max_space, user];
+            const rows = await this.query(sql, args);
+            return rows;
+        }
+        catch(err){
+            console.log(err);
+            return 0;
         }
     }
 
@@ -197,5 +234,7 @@ module.exports = DB;
 // active: tinyint(1)
 // username: varchar(255)
 // password: varchar(255)
+// size: int(11)
+// max_size: int(11)
 // will_delete: tinyint(1)
 // date_delete: datetime

@@ -3,6 +3,7 @@ const path = require('path');
 const fs = require('fs');
 const router = express.Router();
 const DB = require(path.join(__dirname, '..', 'database', 'database.js'));
+const DLog = require(path.join(__dirname, '..', 'utils', 'dlog.js'));
 
 const DEBUG = false;
 
@@ -11,26 +12,35 @@ router.use('/css', express.static(path.join(__dirname, '..', 'public', 'css')));
 router.use('/img', express.static(path.join(__dirname, '..', 'public', 'img')));
 
 router.use('/', (req, res, next) => {
-    console.log('login user');
+    console.log('index user');
+    DLog.log('index user');
     // get url
     const url = req.url;
     
     const is_loged = (req.session.userid);
     if (!is_loged) {
-        console.log('login user');
+        console.log('not loged user');
+        DLog.log('not loged user');
         res.render('login.ejs', {type: 'user'}); 
         return;
     }
+
     next();
 });
 
 router.get('/login.html', (req, res) => {
-    console.log('get login');
-    const is_loged = (req.session.userid || DEBUG); 
-    if (is_loged) 
-        res.redirect('/');
-    else
-        res.render('login.ejs', {type: 'user'});
+    try{
+        console.log('get login');
+        const is_loged = (req.session.userid || DEBUG); 
+        if (is_loged) 
+            res.redirect('/');
+        else
+            res.render('login.ejs', {type: 'user'});
+    }
+    catch(err){
+        DLog.error(err.message);
+        res.send(err);
+    }
 });
 
 router.get('/download/:file', (req, res) => {
@@ -62,10 +72,20 @@ router.use('/', (req, res, next) => {
     // else{
     //     next();
     // }    
-    const data = { is_loged: req.session.userid };
-    data.files = GetFilesFromFolder(path.join(__dirname, '..', 'transfer', req.session.userid));
-    
-    res.render('index.ejs', data);
+
+    try {
+        const data = { is_loged: req.session.userid };
+        data.files = GetFilesFromFolder(path.join(__dirname, '..', 'transfer', req.session.userid));
+        DLog.log('get index');
+        DLog.log(JSON.stringify(data));
+
+        
+        res.render('index.ejs', data);
+    }
+    catch(err){
+        DLog.error(err.message);
+        res.send(err);
+    }
 });
 
 router.use((req, res) => {

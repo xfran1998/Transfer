@@ -1,23 +1,86 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/style.css">
+    <title>Login</title>
+</head>
+<body id="main-body">
+    <div id="login-container" class="flex-c s-all">
+        <h1>Login</h1>
+        <form action="api/login" method="post" id="login-form" class="flex-c min-card">
+            <input id="login-type" type="hidden" value="<%= type %>">
+            <label for="username">Username:</label>
+            <input type="text" name="username" id="username">
+            <label for="password">Password:</label>
+            <input type="password" name="password" id="password">
+            <input type="hidden" name="type" value="<%= type %>">
+            <input type="submit" value="Login">
+        </form>    
+    </div>
+    <script type="module" src="/js/login_init.js"></script>
+</body>
+</html> -->
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/style.css">
     <title>Login</title>
 </head>
 <body id="main-body">
-    <h1>Login</h1>
-    <form action="api/login" method="post" id="login-form">
-        <input id="login-type" type="hidden" value="<%= type %>">
-        <label for="username">Username:</label>
-        <input type="text" name="username" id="username">
-        <label for="password">Password:</label>
-        <input type="password" name="password" id="password">
-        <input type="hidden" name="type" value="<%= type %>">
-        <input type="submit" value="Login">
-    </form>    
-    <!-- <script type="module" src="./js/main.js"></script> -->
+    <div id="login-container" class="flex-c s-all">
+        <form id="login-form">
+            <input id="login-type" type="hidden" value="<%= type %>">
+            <div class="flex-c w-100">
+                <img src="/img/insolectric-logo.png" alt="logo" class="logo-h1">
+            </div>
+            <div class="input email">
+                <input type="text" id="user" placeholder=" ">
+                <label>User</label>
+            </div>
+            <div class="input password">
+                <div class="dots"></div>
+                <input type="password" placeholder=" ">
+                <label>Password</label>
+                <div class="cursor"></div>
+                <div class="line">
+                    <svg>
+                        <use xlink:href="#line">
+                    </svg>
+                </div>
+                <div class="tick">
+                    <svg>
+                        <use xlink:href="#tick">
+                    </svg>
+                </div>
+            </div>
+            <button type="submit" disabled>
+                <svg viewBox="0 0 16 16">
+                    <circle stroke-opacity=".1" cx="8" cy="8" r="6"></circle>
+                    <circle class="load" cx="8" cy="8" r="6"></circle>
+                </svg>
+                <span>Submit</span>
+            </button>
+            <svg class="logo">
+                <use xlink:href="#logo">
+            </svg>
+        </form>
+        <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+            <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 22" id="line">
+                <path d="M0,11 L180,11 C240,11.00344 300,13.6718267 360,19.00516 C450,27.00516 450,-4.99483997 540,3.00516003 C600,8.33849336 660,11.00344 720,11 L900,11"></path>
+            </symbol>
+            <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 28" id="tick">
+                <path d="M3,12.5026479 L7,16.5026479 L13,9.50264792 C29.6216402,-12.0066881 40.3541164,26.00516 19,26.0026479 L-3.37507799e-13,26.0026479"></path>
+            </symbol>
+        </svg>
+    </div>
     <script type="module" src="/js/login_init.js"></script>
 </body>
 </html>

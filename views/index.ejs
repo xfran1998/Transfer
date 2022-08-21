@@ -19,7 +19,8 @@
         <% files.forEach( (file) => { %>
             <div class="file-container">
                 <div class="file-icon">
-                    <img src="/img/icon_<%= file.split('.').at(-1) %>.svg" alt="file">
+                    <% let name_arr = file.split('.'); %> 
+                    <img src="/img/icon_<%= name_arr[name_arr.length - 1] %>.svg" alt="file">
                     <div class="file-buttons">
                         <button class="file-btn-client file-download" data-file="<%= file %>"><i class="fa-solid fa-file-arrow-down"></i></button>
                     </div>

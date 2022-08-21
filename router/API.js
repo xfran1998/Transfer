@@ -3,12 +3,14 @@ const path = require('path');
 const router = express.Router();
 const DB = require(path.join(__dirname, '..', 'database', 'database.js'));
 const fs = require('fs');
-const fastFolderSize = require('fast-folder-size');
 const fileUpload = require('express-fileupload');
-const {filePayloadExists, fileSizeLimiter, fileTypeLimiter} = require('./middleware/ManageFiles.js');
+const {filePayloadExists, fileSizeLimiter, fileTypeLimiter, fileSaver, removeFile} = require('./middleware/ManageFiles.js');
+const { setSize, getSize } = require('./middleware/CalcSize.js');
+const DLog = require(path.join(__dirname, '..', 'utils', 'dlog.js'));
 
 
 router.post('/login', (req, res) => {
+    console.log('login:', JSON.stringify(req.body));
     const username = req.body.username;
     const password = req.body.password;
     const admin = (req.body.type == 'admin') ? 1 : 0;
@@ -51,97 +53,56 @@ router.post('/admin/create_user', (req, res) => {
     create_folder(user);
 });
 
-router.post('/admin/files/edit', (req, res) => {    
-    const owner = req.body.owner;
-    const file = req.body.file;
-    const edit = req.body.edit;
-
-    if (edit.type == 'delete') {
-        console.log('delete file');
-        const succes = delete_file(owner, file);
-        succes ?    res.json({code: 200, message: 'File deleted successfully'}) : 
-                    res.json({code: 407, message: 'Error deleting file'});
-        return;
+router.post('/admin/files/edit', 
+    removeFile,
+    setSize,
+    (req, res) => {
+        if (req.body.edit.type == 'delete') {
+            return res.json({code: 200, message: 'File deleted successfully'});
+        }
+        if (req.body.edit.type == 'rename') {
+            return res.json({code: 200, message: 'File renamed successfully'});
+        }
     }
-    else if (edit.type == 'rename') {
-        console.log('rename file');
-        const succes = rename_file(owner, file, edit.name);
-        console.log(succes);
-        succes ?    res.json({code: 200, message: 'File renamed successfully'}) : 
-                    res.json({code: 500, message: 'Error renaming file'});
-        return;
-    }
-
-    // console.table({owner, file, edit});
-});
+);
 
 router.post('/admin/files/upload', 
     fileUpload({ useTempFiles: true }),
     filePayloadExists,
     fileSizeLimiter,
     fileTypeLimiter,
+    fileSaver,
+    setSize,
     (req, res) => {
-        console.log('upload file:', req.body.owner);
-        const files = req.files;
-        // console.table(files);
-    
-        // save file in transfer folder
-        const path_folder = path.join(__dirname, '..', 'transfer', req.body.owner);
-        Object.keys(files).forEach(key => {
-            const file = files[key];
-            var file_path = path.join(path_folder, file.name);
-
-            // rename the file if it already exists
-            if (fs.existsSync(file_path)) {
-                const file_name = file.name.split('.');
-                const file_ext = file_name[file_name.length - 1];
-                const file_name_new = file_name.slice(0, file_name.length - 1).join('.') + '_' + Date.now() + '.' + file_ext;
-                
-                file.name = file_name_new;
-                file_path = path.join(path_folder, file.name);
-            }
-            
-            
-            file.mv(file_path, err => {
-                if (err) {
-                    console.log(err);
-                    return res.json({code: 500, message: 'Error uploading file'});
-                }
-            } );
-        } );
-
         return res.json({code: 200, message: 'ok'});
-});
+    }
+);
 
-router.get('/admin/folders/info/:id', (req, res) => {
-    console.log('get info folders: ' + req.params.id);
+router.get('/admin/folders/info/:owner', 
+    getSize,
+    async (req, res) => {
+    console.log('get info folders: ' + req.params.owner);
     try {
-        (async () => {
-            let info = {};
-            info.name = req.params.id;
-            info.size = await get_size_folder(req.params.id);
+        let info = {};
+        info.name = req.params.owner;
+        info.size = res.locals.size;
 
-            // console.table(info);
-            res.send({code: 200, message: 'ok', info: info});
-            // res.render(path.join('admin', 'folders.ejs', {info: info}));
-        })();  
+        res.send({code: 200, message: 'ok', info: info});
+        // res.render(path.join('admin', 'folders.ejs', {info: info}));
     }
     catch(error) {
         console.log(error);
     }
 });
 
-router.get('/admin/folders/files/:id', (req, res) => {
+router.get('/admin/folders/files/:id', async (req, res) => {
     console.log('get files folders: ' + req.params.id);
     try {
-        (async () => {
-            let info = {};
-            info.files = get_files_from_folder(req.params.id);
-            info.name = req.params.id;
-            // console.table(info);
-            res.send({code: 200, message: 'ok', info: info});
-            // res.render(path.join('admin', 'folders.ejs', {info: info}));
-        })();  
+        let info = {};
+        info.files = get_files_from_folder(req.params.id);
+        info.name = req.params.id;
+        res.send({code: 200, message: 'ok', info: info});
+        // res.render(path.join('admin', 'folders.ejs', {info: info}));
     }
     catch(error) {
         console.log(error);
@@ -206,7 +167,7 @@ async function create_user(username, password, del_date, res, req) {
     }
 }
 
-async function send_all_users(res, req) {
+async function get_all_users(res, req) {
     const db_conn = new DB();
     const users = await db_conn.get_all_users();
     db_conn.close();
@@ -217,6 +178,21 @@ async function send_all_users(res, req) {
     else {
         res.send({code: 407, message: 'Error creating user'});
     }
+}
+
+async function get_size_user(username) {
+    const db_conn = new DB();
+    const size = await db_conn.get_size_user(username);
+    db_conn.close();
+    
+    // if (is_correct) {
+    //     res.send({code: 200, message: 'ok', users: users});
+    // }
+    // else {
+    //     res.send({code: 407, message: 'Error creating user'});
+    // }
+
+    return size;
 }
 
 function get_files_from_folder(folder_id) {
@@ -258,59 +234,4 @@ function get_files_from_folder(folder_id) {
         console.log(error);
         return [];
     }
-}
-
-function get_size_folder(folder_id) {
-    // get size from folder /transfer/folder_id/
-    return new Promise((resolve, reject) => {
-        const path_folder = path.join(__dirname, '..', 'transfer', folder_id);
-        fastFolderSize(path_folder, (err, bytes) => {
-            if (err) {
-                reject(err);
-            }
-
-            if (bytes > 1024) {
-                // convert bytes to KB
-                bytes /= 1024;
-                
-                if (bytes > 1024) {
-                    // convert bytes to MB
-                    bytes /= 1024;
-                    resolve(bytes.toFixed(2) + ' MB');
-                }
-                
-                resolve(bytes.toFixed(2) + ' KB');
-            }
-
-            resolve(bytes + ' bytes');
-        });
-    });    
-}
-
-function rename_file(owner, old_name, new_name){
-    // rename file /transfer/owner/old_name to /transfer/owner/new_name
-    const path_old = path.join(__dirname, '..', 'transfer', owner, old_name);
-    const path_new = path.join(__dirname, '..', 'transfer', owner, new_name);
-    fs.rename(path_old, path_new, (err) => {
-        if (err) {
-            console.log(err);
-            return false;
-        }
-    } );
-
-    return true;
-}
-
-function delete_file(owner, name){
-    // delete file /transfer/owner/name
-    console.log('delete_file: ' + owner + ' ' + name);
-    const path_file = path.join(__dirname, '..', 'transfer', owner, name);
-    fs.unlink(path_file, (err) => {
-        if (err) {
-            console.log(err);
-            return false;
-        }
-    } );
-
-    return true;
 }

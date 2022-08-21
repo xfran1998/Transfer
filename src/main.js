@@ -5,7 +5,10 @@ class Main extends AsyncTransfer {
     static history = [];
     static index = 0;
 
-    static PostFormLogin(type) {
+    static PostFormLogin() {
+        const type = document.getElementById('login-type').value;
+        console.log('login: ' + type);
+
         let form = document.getElementById('login-form');
         console.log(form);
 
@@ -264,14 +267,27 @@ class Main extends AsyncTransfer {
         const folder_view = document.querySelectorAll('.folder-view');
 
         folder_info.forEach(folder => {
-            folder.addEventListener('click', (e) => {
+            folder.addEventListener('click', async (e) => {
                 e.preventDefault();
-                (async () => {
-                    const url = e.currentTarget.getAttribute('href');
-                    const json_resp = await Main.GetAPIAsync(url);
-                    console.log('info');
-                    console.log(json_resp);
-                })();
+                
+                const url = e.currentTarget.getAttribute('href');
+                const json_resp = await Main.GetAPIAsync(url);
+                console.log('info');
+                console.log(json_resp);
+
+                const img = folder.parentElement.querySelector('img');
+                const chart = folder.parentElement.querySelector('.single-chart');
+
+                console.log(img);
+                console.log(chart);
+
+                Files.HideAnimatedElement(img);
+                Files.SetChart(chart, json_resp.info.size);
+
+                setTimeout(() => {
+                    Files.RevealAnimatedElement(chart);
+                    Files.AnimateSizeChart(chart.querySelector('.circle'));
+                }, 200);
             });
         });     
         

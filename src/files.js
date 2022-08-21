@@ -152,6 +152,23 @@ class Files {
         });
     }
 
+    static async TransformBytes (bytes) {
+        if (bytes > 1024) {
+            // convert bytes to KB
+            bytes /= 1024;
+            
+            if (bytes > 1024) {
+                // convert bytes to MB
+                bytes /= 1024;
+                return bytes.toFixed(2) + 'MB';
+            }
+            
+            return bytes.toFixed(2) + 'KB';
+        }
+    
+        return bytes + 'B';
+    }
+
     static async PostEditFile(owner, file, edit) {
         // owner: 'user' <string> | name of the user
         // file: 'file' <string> | name of the file
@@ -176,6 +193,36 @@ class Files {
         }
     }
 
+    static async SetChart(chart, sizes){
+        if (!sizes.max_space) {
+            chart.querySelector('.percentage').innerHTML = `${await Files.TransformBytes(sizes.size)}`;
+            return;
+        }
+
+        chart.querySelector('.circle').setAttribute('stroke-dasharray', `${sizes.size / sizes.max_space * 100}, 100`);
+        chart.querySelector('.percentage').innerHTML = `${await Files.TransformBytes(sizes.size)}`;
+        chart.querySelector('.max-size').innerHTML = `${await Files.TransformBytes(sizes.max_space)}`;
+    }
+
+    static AnimateSizeChart(chart) {
+        // chart.classList.remove('animate-chart');
+        chart.classList.remove('animate-chart');
+        chart.classList.add('animate-chart');
+    }
+
+    static async RevealAnimatedElement(source) {
+        source.classList.remove('go-down');
+        source.classList.add('go-up');
+    }
+
+    static HideAnimatedElement(source) {
+        source.classList.remove('go-up');
+        source.classList.add('go-down');
+    }
+
+
+
+    // template for each file container, modify or delete file
     static TemplateFileContainer(owner, file){
         return `
             <div class="file-icon">
@@ -192,6 +239,7 @@ class Files {
         `;
     }
 
+    // template for the drop items, upload files
     static TemplateFileDrop(){
         return `
             <i class="fa-solid fa-images"></i>
