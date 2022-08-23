@@ -147,6 +147,8 @@ login.addEventListener('submit', async(e) => {
             const res = await user_login(user.value, password.value, form_type);
             console.log(res);
 
+            if (res.code == 200) window.location.reload();
+
             // let cls = password.value == 'password' ? 'success' : 'error';
             let cls = res.code == 200 ? 'success' : 'error';
             console.log(password.value);

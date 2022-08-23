@@ -65,10 +65,19 @@ div div p a#NXReportButton.notiflix-report-button{
     bottom: 0;
     left: 0;
     width: 100%;
-    padding: 10px 15px;
+    height: 38px;
+    /* padding: 10px 15px; */
     text-align: center;
     background-color: rgb(255, 255, 255);
     z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+}
+
+.file-info input{
+  padding: 3px 8px;
 }
 
 .file-icon {
@@ -100,15 +109,26 @@ div div p a#NXReportButton.notiflix-report-button{
 }
 
 .file-buttons .file-btn{
-    padding: 20px;
+    /* padding: 20px;
     background-color: rgba(230, 228, 228, 0.8);
     border-radius: 4px;
     border: 1px solid rgba(204, 204, 204, 1);
     color: rgb(48, 147, 212);
     font-size: 1.7rem;
-    cursor: pointer;
     width: 72px;
-    height: 74px;
+    height: 74px; */
+    padding: 2px;
+    background-color: transparent;
+    border-radius: 4px;
+    border: none;
+    color: rgb(48, 147, 212);
+    font-size: 2.4rem;
+    cursor: pointer;
+    transition: all 0.4s ease;
+}
+
+.file-buttons .file-btn:hover{
+  color: rgb(44 110 185);
 }
 
 .file-buttons .file-btn-client{

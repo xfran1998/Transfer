@@ -278,8 +278,13 @@ class Main extends AsyncTransfer {
                 const img = folder.parentElement.querySelector('img');
                 const chart = folder.parentElement.querySelector('.single-chart');
 
-                console.log(img);
-                console.log(chart);
+                if (!json_resp.info.size.max_space) {
+                    console.log(json_resp.info.size.max_space);
+                    const circle_chart = chart.querySelector('.circular-chart');
+                    circle_chart.classList.remove('blue');
+                    circle_chart.classList.add('green');
+                    circle_chart.querySelector('.circle').setAttribute('stroke-dasharray', '100, 100');
+                }
 
                 Files.HideAnimatedElement(img);
                 Files.SetChart(chart, json_resp.info.size);

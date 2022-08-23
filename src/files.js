@@ -138,7 +138,8 @@ class Files {
                 const user = e.target.getAttribute('data-user');
                 const file = e.target.getAttribute('data-file');
              
-                Files.PostEditFile(user, file, {type: 'rename', name: 'new_name'});
+                Files.CreateInput(user, file, e.currentTarget.parentElement.parentElement.parentElement);
+                // Files.PostEditFile(user, file, {type: 'rename', name: 'new_name'});
             });
 
             // add event listener to delete file
@@ -150,6 +151,37 @@ class Files {
                 Files.PostEditFile(user, file, {type: 'delete'});
             });
         });
+    }
+
+    static CreateInput(user, file, file_cont){
+        // save current state of file container
+        console.log(file_cont);
+        const info = file_cont.querySelector('.file-info');
+        // const inner_info = info.innerHTML;
+        const id_form = info.querySelector('.text-name-file').innerHTML;
+
+        // create input for rename file
+        const form = document.createElement('form');
+        form.id = id_form;
+        form.innerHTML = `<input type="text" class="file-input" value="${id_form}">`;
+
+        // add input to info
+        info.innerHTML = '';
+        info.appendChild(form);
+
+        // focus input
+        form.querySelector('.file-input').focus();
+        // set cursor at the end of input behind . (name.ext)
+        const dot_index = id_form.lastIndexOf('.');
+        form.querySelector('.file-input').setSelectionRange(dot_index, dot_index);
+
+        // add event listener to input
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const new_name = e.currentTarget.querySelector('.file-input').value;
+            const json_resp = await Files.PostEditFile(user, file, {type: 'rename', name: new_name});
+        });                
+
     }
 
     static async TransformBytes (bytes) {
@@ -184,13 +216,15 @@ class Files {
             return;
         }
 
-        var file_container = document.querySelector(`[data-file="${file}"]`).parentElement.parentElement.parentElement;
-        console.log(file_container);
-        if (edit.type === 'rename') {
-            file_container.querySelector('.text-name-file').innerHTML = edit.name;
-        } else if (edit.type === 'delete') {
-            file_container.remove();
-        }
+        Files.ReloadFolder();
+        // window.location.reload();
+        // var file_container = document.querySelector(`[data-file="${file}"]`).parentElement.parentElement.parentElement;
+        // console.log(file_container);
+        // if (edit.type === 'rename') {
+        //     file_container.querySelector('.text-name-file').innerHTML = edit.name;
+        // } else if (edit.type === 'delete') {
+        //     file_container.remove();
+        // }
     }
 
     static async SetChart(chart, sizes){
